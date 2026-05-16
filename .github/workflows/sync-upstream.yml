@@ -2,7 +2,8 @@ name: Sync upstream
 
 on:
   schedule:
-    - cron: "0 3 * * *"
+    # 每年 1 月 1 日和 7 月 1 日 UTC 03:00 执行
+    - cron: "0 3 1 1,7 *"
   workflow_dispatch:
 
 permissions:
