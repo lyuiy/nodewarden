@@ -91,6 +91,7 @@ const COMMON_IMPORT_SOURCE_IDS: ImportSourceId[] = [
   'lastpass',
   'dashlane_csv',
   'dashlane_json',
+  'keepass_csv',
   'keepass_xml',
   'keepassx_csv',
 ];
@@ -468,6 +469,7 @@ export default function ImportPage({ onImport, onImportEncryptedRaw, accountKeys
   }
 
   async function handlePasswordImportConfirm() {
+    if (isPasswordSubmitting) return;
     if (!pendingPasswordImport) return;
     setIsPasswordSubmitting(true);
     try {
@@ -486,6 +488,7 @@ export default function ImportPage({ onImport, onImportEncryptedRaw, accountKeys
   }
 
   async function handleZipPasswordImportConfirm() {
+    if (isZipPasswordSubmitting) return;
     if (!pendingZipFile) return;
     setIsZipPasswordSubmitting(true);
     try {
@@ -558,6 +561,7 @@ export default function ImportPage({ onImport, onImportEncryptedRaw, accountKeys
   }
 
   async function handleExportConfirmPassword() {
+    if (isExporting) return;
     const masterPassword = String(exportAuthPassword || '').trim();
     if (!masterPassword) {
       onNotify('error', t('txt_master_password_is_required'));
@@ -736,6 +740,8 @@ export default function ImportPage({ onImport, onImportEncryptedRaw, accountKeys
         confirmText={isExporting ? t('txt_loading') : t('txt_verify')}
         cancelText={t('txt_cancel')}
         showIcon={false}
+        confirmDisabled={isExporting}
+        cancelDisabled={isExporting}
         onConfirm={() => void handleExportConfirmPassword()}
         onCancel={() => {
           if (isExporting) return;
@@ -761,6 +767,8 @@ export default function ImportPage({ onImport, onImportEncryptedRaw, accountKeys
         confirmText={isPasswordSubmitting ? t('txt_loading') : t('txt_import')}
         cancelText={t('txt_cancel')}
         showIcon={false}
+        confirmDisabled={isPasswordSubmitting}
+        cancelDisabled={isPasswordSubmitting}
         onConfirm={() => void handlePasswordImportConfirm()}
         onCancel={() => {
           if (isPasswordSubmitting) return;
@@ -787,6 +795,8 @@ export default function ImportPage({ onImport, onImportEncryptedRaw, accountKeys
         confirmText={isZipPasswordSubmitting ? t('txt_loading') : t('txt_import')}
         cancelText={t('txt_cancel')}
         showIcon={false}
+        confirmDisabled={isZipPasswordSubmitting}
+        cancelDisabled={isZipPasswordSubmitting}
         onConfirm={() => void handleZipPasswordImportConfirm()}
         onCancel={() => {
           if (isZipPasswordSubmitting) return;
